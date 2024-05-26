@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Inject,
 } from '@nestjs/common';
 import { TrainingsService } from './trainings.service';
 import { CreateTrainingDto } from './dto/create-training.dto';
@@ -13,10 +14,13 @@ import { UpdateTrainingDto } from './dto/update-training.dto';
 
 @Controller('trainings')
 export class TrainingsController {
-  constructor(private readonly trainingsService: TrainingsService) {}
+  constructor(
+    @Inject(TrainingsService)
+    private readonly trainingsService: TrainingsService,
+  ) {}
 
   @Post()
-  create(@Body() createTrainingDto: CreateTrainingDto) {
+  async create(@Body() createTrainingDto: CreateTrainingDto) {
     return this.trainingsService.create(createTrainingDto);
   }
 
