@@ -7,6 +7,9 @@ import helmet from 'helmet';
 
 const bootstrap = async () => {
   const app = await NestFactory.create(AppModule);
+  app.enableCors({
+    origin: '*',
+  });
   app.useGlobalPipes(validateDtoPipe);
   app.use(cookieParser());
   (app as NestExpressApplication).use(helmet());
