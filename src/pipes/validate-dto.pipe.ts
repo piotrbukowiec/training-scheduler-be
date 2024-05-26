@@ -1,6 +1,6 @@
 import { ValidationPipe } from '@nestjs/common';
 
-export const validationPipe = new ValidationPipe({
+export const validateDtoPipe = new ValidationPipe({
   forbidNonWhitelisted: true,
   whitelist: true,
 });
