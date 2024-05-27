@@ -1,46 +1,28 @@
 import {
   Controller,
-  Get,
   Post,
   Body,
-  Patch,
-  Param,
-  Delete,
   Inject,
+  HttpCode,
+  HttpStatus,
+  UseGuards,
+  forwardRef,
 } from '@nestjs/common';
 import { TrainingsService } from './trainings.service';
 import { CreateTrainingDto } from './dto/create-training.dto';
-import { UpdateTrainingDto } from './dto/update-training.dto';
-
+import { SkipThrottle, Throttle } from '@nestjs/throttler';
+@SkipThrottle()
 @Controller('trainings')
 export class TrainingsController {
   constructor(
-    @Inject(TrainingsService)
+    @Inject(forwardRef(() => TrainingsService))
     private readonly trainingsService: TrainingsService,
   ) {}
 
-  @Post()
+  @Post('/')
+  @HttpCode(HttpStatus.CREATED)
+  @Throttle({ long: { ttl: 60000, limit: 2 } })
   async create(@Body() createTrainingDto: CreateTrainingDto) {
     return this.trainingsService.create(createTrainingDto);
   }
-
-  // @Get()
-  // findAll() {
-  //   return this.trainingsService.findAll();
-  // }
-
-  // @Get(':id')
-  // findOne(@Param('id') id: string) {
-  //   return this.trainingsService.findOne(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateTrainingDto: UpdateTrainingDto) {
-  //   return this.trainingsService.update(+id, updateTrainingDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.trainingsService.remove(+id);
-  // }
 }
