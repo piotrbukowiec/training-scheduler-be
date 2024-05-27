@@ -9,7 +9,7 @@ const extractFirstChoiceText = (msg: ChatCompletion): ChatResponse => {
 
 export class OpenAIChat {
   private readonly openai = new OpenAI({
-    apiKey: 'sk-proj-EWcmro5ez3P4q9JfyCQ7T3BlbkFJhOqbVpC8KMD5Fa0buYdJ',
+    apiKey: process.env.OPENAI_API_KEY,
   });
   private readonly messages: ChatMessage[];
   private readonly customParams: ChatMessageParam;
