@@ -6,6 +6,8 @@ import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
 import { ConfigModule } from '@nestjs/config';
 import * as Joi from 'joi';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { typeOrmConfig } from './config/typeorm.config';
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -16,6 +18,7 @@ import * as Joi from 'joi';
         OPENAI_API_KEY: Joi.string().default(null),
       }),
     }),
+    TypeOrmModule.forRoot(typeOrmConfig),
     ThrottlerModule.forRoot([
       {
         name: 'long',

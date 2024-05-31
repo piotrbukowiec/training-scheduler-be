@@ -1,10 +1,12 @@
-import { Injectable, InternalServerErrorException } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  InternalServerErrorException,
+} from '@nestjs/common';
 import { CreateTrainingDto } from './dto/create-training.dto';
-import { UpdateTrainingDto } from './dto/update-training.dto';
 import { getChatbots } from 'src/openai-chat/chats/get-chatbots';
-import { TrainingParams } from 'src/types/training';
 import { formatTrainingParams } from 'src/utils/format-training-params';
-import { InternalServerError } from 'openai';
+import { TrainingsEntity } from './trainings.entity';
 
 @Injectable()
 export class TrainingsService {
@@ -21,27 +23,18 @@ export class TrainingsService {
         'Error while getting training params',
       );
     const formattedTrainingParams = formatTrainingParams(trainingParams);
-    const training = JSON.parse(
+    const { exercises } = JSON.parse(
       await generateTrainingChatbot.say(formattedTrainingParams),
     );
-    if (!training)
-      throw new InternalServerErrorException('Error while generating training');
-    return training;
+    if (!exercises)
+      throw new BadRequestException('Error while generating training');
+    const training = new TrainingsEntity();
+    Object.assign(training, {
+      exercises: JSON.stringify(exercises),
+      prompt,
+    });
+    await training.save();
+
+    return exercises;
   }
-
-  // findAll() {
-  //   return `This action returns all trainings`;
-  // }
-
-  // findOne(id: number) {
-  //   return `This action returns a #${id} training`;
-  // }
-
-  // update(id: number, updateTrainingDto: UpdateTrainingDto) {
-  //   return `This action updates a #${id} training`;
-  // }
-
-  // remove(id: number) {
-  //   return `This action removes a #${id} training`;
-  // }
 }
