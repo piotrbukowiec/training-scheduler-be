@@ -5,7 +5,7 @@ import {
   Inject,
   HttpCode,
   HttpStatus,
-  UseGuards,
+  Req,
   forwardRef,
 } from '@nestjs/common';
 import { TrainingsService } from './trainings.service';
@@ -22,7 +22,11 @@ export class TrainingsController {
   @Post('/')
   @HttpCode(HttpStatus.CREATED)
   @Throttle({ long: { ttl: 60000, limit: 2 } })
-  async create(@Body() createTrainingDto: CreateTrainingDto) {
+  async create(
+    @Body() createTrainingDto: CreateTrainingDto,
+    @Req() req: Request,
+  ) {
+    console.log('BODY: ', req.body);
     return this.trainingsService.create(createTrainingDto);
   }
 }

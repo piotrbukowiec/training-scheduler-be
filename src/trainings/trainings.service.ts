@@ -19,9 +19,7 @@ export class TrainingsService {
       await getTrainingParamsChatbot.say(prompt),
     );
     if (!trainingParams)
-      throw new InternalServerErrorException(
-        'Error while getting training params',
-      );
+      throw new BadRequestException('Error while getting training params');
     const formattedTrainingParams = formatTrainingParams(trainingParams);
     const { exercises } = JSON.parse(
       await generateTrainingChatbot.say(formattedTrainingParams),
