@@ -1,4 +1,3 @@
-import { ChatMessageParam } from 'src/types/chat';
 import { OpenAIChat } from '../openai-chat';
 
 export const getChatbots = async () => {
