@@ -1,4 +1,4 @@
-# Trainings Scheduler - app for generating schedules using OpenAPI
+# Training Scheduler - app for generating schedules using OpenAPI
 
 ## Installation
 
